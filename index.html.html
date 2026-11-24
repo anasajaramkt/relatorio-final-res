@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Final de Gestão de Reservas e Ocupação — Ria Endless South (Nov 2025 – Nov 2026)</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --ink: #1f2421;
+    --muted: #5a635e;
+    --accent: #2c4a3e;
+    --accent-light: #eef3f0;
+    --border: #dfe4e0;
+    --row-alt: #f5f7f5;
+    --total-bg: #e7ede9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    max-width: 1480px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  aside.sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  aside.sidebar .brand {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  aside.sidebar h2 {
+    font-size: 16px;
+    margin: 0 0 18px 0;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  aside.sidebar nav a {
+    display: block;
+    padding: 7px 10px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.35;
+    transition: background 0.15s, color 0.15s;
+  }
+  aside.sidebar nav a:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .btn-print {
+    margin-top: 20px;
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-print:hover { opacity: 0.92; }
+  main.content {
+    padding: 36px 44px 72px 44px;
+    min-width: 0;
+  }
+  header.doc-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--accent);
+    border-radius: 8px;
+    padding: 26px 30px;
+    margin-bottom: 32px;
+  }
+  header.doc-header h1 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    color: var(--accent);
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 8px 24px;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .meta-grid strong { color: var(--ink); }
+  header.doc-header p.lead {
+    margin: 12px 0 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+  section.sec {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 26px 28px;
+    margin-bottom: 28px;
+  }
+  section.sec > h2 {
+    margin: 0 0 10px 0;
+    font-size: 19px;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent-light);
+    padding-bottom: 8px;
+  }
+  h3 {
+    margin: 24px 0 8px 0;
+    font-size: 15.5px;
+    color: var(--ink);
+  }
+  p { margin: 0 0 12px 0; }
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin: 12px 0 16px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 680px;
+  }
+  th, td {
+    padding: 9px 11px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--accent);
+    color: #ffffff;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tr.subtotal td, tr.total td {
+    background: var(--total-bg);
+    font-weight: 700;
+    border-top: 1.5px solid #b9c4bd;
+  }
+  tr.group-row td {
+    background: #eef2ef;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .num { text-align: right; white-space: nowrap; }
+  .note {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 6px;
+  }
+  ul.clean-list {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+  ul.clean-list li { margin-bottom: 6px; }
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    main.content { padding: 20px 16px 48px 16px; }
+  }
+  @media print {
+    aside.sidebar { display: none; }
+    .layout { display: block; }
+    main.content { padding: 0; }
+    section.sec, header.doc-header { break-inside: avoid-page; border: none; padding: 10px 0; }
+    .table-wrap { overflow: visible; border: none; }
+    table { min-width: 0; font-size: 10.5px; }
+    th, td { padding: 5px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">Ria Endless South</div>
+    <h2>Relatório Final de Gestão<br><span style="font-weight:400;font-size:13px;color:var(--muted);">Nov 2025 – Nov 2026</span></h2>
+    <nav>
+      <a href="#sec1">1. Registo Geral das Reservas AL</a>
+      <a href="#sec2">2. Análise das Reservas AL</a>
+      <a href="#sec3">3. Propostas de Eventos (Casamentos)</a>
+      <a href="#sec4">4. Reservas Não Faturadas e Bloqueios</a>
+      <a href="#sec5">5. Nota: Ocupação Autónoma da Biblioteca</a>
+      <a href="#sec6">6. Deslocações e Visitas Técnicas</a>
+      <a href="#sec7">7. Balanço Global das Atividades</a>
+      <a href="#sec8">8. Contas Operacionais e Fundo de Maneio</a>
+    </nav>
+    <button class="btn-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </aside>
+
+  <main class="content">
+    <header class="doc-header">
+      <h1>Relatório Final de Gestão de Reservas e Ocupação</h1>
+      <div class="meta-grid">
+        <div><strong>Unidade:</strong> Ria Endless South (Quinta da Barroca — Cabanas de Tavira)</div>
+        <div><strong>Período de Análise:</strong> Novembro de 2025 a Novembro de 2026</div>
+        <div style="grid-column: 1 / -1;"><strong>Data de Emissão:</strong> 21 de novembro de 2026 (dados disponíveis à data, com valores faturados e visitas técnicas concluídas apurados até 8 de setembro de 2026, e registo de ocupação e calendário atualizado até novembro de 2026)</div>
+      </div>
+      <p class="lead">Este relatório apresenta o balanço consolidado da gestão de reservas, pedidos comerciais, bloqueios de calendário e ocupação operacional da Ria Endless South entre novembro de 2025 e novembro de 2026, conciliando os registos administrativos, a caixa de correio da propriedade e os calendários de ocupação.</p>
+    </header>
+
+    <!-- SECÇÃO 1 -->
+    <section class="sec" id="sec1">
+      <h2>1. Registo Geral das Reservas de Alojamento Local (por Ordem de Entrada)</h2>
+      <p>Apresenta-se de seguida o historial completo dos registos de alojamento registados na plataforma e canais diretos por ordem cronológica de entrada, abrangendo estadias concluídas, canceladas e futuras.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID / Ref.</th>
+              <th>Data de Registo</th>
+              <th>Canal</th>
+              <th>Titular / Hóspede</th>
+              <th>Período de Estadia</th>
+              <th class="num">Noites</th>
+              <th>Estado</th>
+              <th class="num">Valor Bruto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>000-2025</td><td>24/11/2025</td><td>Proprietários</td><td>Gabriela e Pedro Costa</td><td>28/03/2026 a 04/04/2026</td><td class="num">7</td><td>Concluída (Uso próprio)</td><td class="num">—</td></tr>
+            <tr><td>001-2025 (#6247202329)</td><td>02/12/2025</td><td>Booking.com</td><td>Sandra Almeida</td><td>22/08/2026 a 29/08/2026</td><td class="num">7</td><td>Cancelada (20/02/2026)</td><td class="num">3.640,00 €</td></tr>
+            <tr><td>002-2026 (#5850828216)</td><td>01/01/2026</td><td>Booking.com</td><td>Carlota Lima Raposo</td><td>25/07/2026 a 31/07/2026</td><td class="num">6</td><td>Cancelada (02/01/2026)</td><td class="num">—</td></tr>
+            <tr><td>003-2026</td><td>21/01/2026</td><td>Direta</td><td>Maria do Carmo Simão</td><td>04/08/2026 a 11/08/2026</td><td class="num">7</td><td>Concluída</td><td class="num">4.300,00 €</td></tr>
+            <tr><td>004-2026 (#5965770268)</td><td>15/02/2026</td><td>Booking.com</td><td>Margarida Gomes Veloso</td><td>23/07/2026 a 26/07/2026</td><td class="num">3</td><td>Cancelada (18/05/2026)</td><td class="num">—</td></tr>
+            <tr><td>005-2026</td><td>06/03/2026</td><td>Direta</td><td>Sílvia Chambel</td><td>31/08/2026 a 06/09/2026</td><td class="num">6</td><td>Concluída</td><td class="num">2.485,00 €</td></tr>
+            <tr><td>006-2026 (#5586840547)</td><td>08/03/2026</td><td>Booking.com</td><td>Álvaro Ferreira Marques</td><td>19/08/2026 a 26/08/2026</td><td class="num">7</td><td>Cancelada (11/06/2026)</td><td class="num">—</td></tr>
+            <tr><td>007-2026</td><td>31/03/2026</td><td>Proprietários</td><td>Gabriela e Pedro Costa</td><td>20/03/2027 a 27/03/2027</td><td class="num">7</td><td>Confirmada (Futura — Uso próprio)</td><td class="num">—</td></tr>
+            <tr><td>008-2026</td><td>20/04/2026</td><td>Direta</td><td>Mafalda Nogueira</td><td>30/04/2026 a 03/05/2026</td><td class="num">3</td><td>Concluída</td><td class="num">1.120,00 €</td></tr>
+            <tr><td>009-2026 (#6450359920)</td><td>25/04/2026</td><td>Booking.com</td><td>Maria Felício</td><td>26/07/2026 a 03/08/2026</td><td class="num">8</td><td>Cancelada (26/04/2026)</td><td class="num">4.862,00 €</td></tr>
+            <tr><td>010-2026 (#HMEH5E2QED)</td><td>19/06/2026</td><td>Airbnb</td><td>Jose Luis Castellano Lopez (Bravotalento SL)</td><td>19/08/2026 a 22/08/2026</td><td class="num">3</td><td>Concluída</td><td class="num">1.455,00 €</td></tr>
+            <tr><td>011-2026 (#5027218716)</td><td>27/06/2026</td><td>Booking.com</td><td>Carina Albuquerque (Colheita Abastada Lda)</td><td>16/08/2026 a 19/08/2026</td><td class="num">3</td><td>Concluída</td><td class="num">1.737,45 €</td></tr>
+            <tr><td>#5111703925</td><td>23/07/2026</td><td>Booking.com</td><td>Cliente Booking.com</td><td>26/08/2026 a —</td><td class="num">—</td><td>Cancelada (no próprio dia)</td><td class="num">—</td></tr>
+            <tr><td>012-2026 (#6025851994)</td><td>24/09/2026</td><td>Booking.com</td><td>Steffen Werner</td><td>14/08/2027 a 20/08/2027</td><td class="num">6</td><td>Confirmada (Futura)</td><td class="num">3.120,00 €</td></tr>
+            <tr><td>013-2026</td><td>25/10/2026</td><td>Cortesia</td><td>Laura Paredes</td><td>05/11/2026 a 12/11/2026</td><td class="num">7</td><td>Concluída (Cortesia)</td><td class="num">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 2 -->
+    <section class="sec" id="sec2">
+      <h2>2. Análise das Reservas de Alojamento Local</h2>
+      <p>Esta secção detalha a performance financeira das reservas efetivadas, contextualiza os períodos transitados de gestões anteriores, discrimina os cancelamentos registados e inventaria os contactos comerciais recebidos no período.</p>
+
+      <h3>A. Reservas Confirmadas e Apuramento Financeiro (Gestão Direta Atual)</h3>
+      <p>Discriminação financeira detalhada de todas as reservas confirmadas, com apuramento da taxa legal de IVA (6%), comissões de intermediação e honorários de gestão contratuais.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID / Ref.</th>
+              <th>Canal</th>
+              <th>Hóspede</th>
+              <th>Período de Estadia</th>
+              <th class="num">Noites</th>
+              <th class="num">Valor Bruto</th>
+              <th class="num">Valor s/ IVA (6%)</th>
+              <th class="num">Comissão Canal</th>
+              <th class="num">Líquido Recebido (após Canal)</th>
+              <th class="num">Comissão Gestão (20%)</th>
+              <th class="num">Líquido após Comissão Gestão</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>008-2026</td><td>Direta</td><td>Mafalda Nogueira</td><td>30/04 a 03/05/2026</td><td class="num">3</td><td class="num">1.120,00 €</td><td class="num">1.056,60 €</td><td class="num">0,00 €</td><td class="num">1.120,00 €</td><td class="num">211,32 €</td><td class="num">908,68 €</td></tr>
+            <tr><td>003-2026</td><td>Direta</td><td>Maria do Carmo Simão</td><td>04/08 a 11/08/2026</td><td class="num">7</td><td class="num">4.300,00 €</td><td class="num">4.056,60 €</td><td class="num">0,00 €</td><td class="num">4.300,00 €</td><td class="num">811,32 €</td><td class="num">3.488,68 €</td></tr>
+            <tr><td>011-2026</td><td>Booking.com</td><td>Carina Albuquerque</td><td>16/08 a 19/08/2026</td><td class="num">3</td><td class="num">1.737,45 €</td><td class="num">1.639,10 €</td><td class="num">284,94 €</td><td class="num">1.452,51 €</td><td class="num">327,82 €</td><td class="num">1.124,69 €</td></tr>
+            <tr><td>010-2026</td><td>Airbnb</td><td>Jose Luis Castellano Lopez</td><td>19/08 a 22/08/2026</td><td class="num">3</td><td class="num">1.455,00 €</td><td class="num">1.372,64 €</td><td class="num">43,65 €</td><td class="num">1.411,35 €</td><td class="num">274,53 €</td><td class="num">1.136,82 €</td></tr>
+            <tr><td>005-2026</td><td>Direta</td><td>Sílvia Chambel</td><td>31/08 a 06/09/2026</td><td class="num">6</td><td class="num">2.485,00 €</td><td class="num">2.344,34 €</td><td class="num">0,00 €</td><td class="num">2.485,00 €</td><td class="num">468,87 €</td><td class="num">2.016,13 €</td></tr>
+            <tr><td>012-2026</td><td>Booking.com</td><td>Steffen Werner (futura)</td><td>14/08 a 20/08/2027</td><td class="num">6</td><td class="num">3.120,00 €</td><td class="num">2.943,40 €</td><td class="num">511,68 €</td><td class="num">2.608,32 € <em>(previsto)</em></td><td class="num">588,68 € <em>(previsto)</em></td><td class="num">2.019,64 € <em>(previsto)</em></td></tr>
+            <tr class="subtotal"><td>SUBTOTAL (2026)</td><td>—</td><td>5 Reservas Concluídas</td><td>—</td><td class="num">22</td><td class="num">11.097,45 €</td><td class="num">10.469,28 €</td><td class="num">328,59 €</td><td class="num">10.768,86 €</td><td class="num">2.093,86 €</td><td class="num">8.675,00 €</td></tr>
+            <tr class="total"><td>TOTAL GLOBAL</td><td>—</td><td>6 Reservas Confirmadas</td><td>—</td><td class="num">28</td><td class="num">14.217,45 €</td><td class="num">13.412,68 €</td><td class="num">840,27 €</td><td class="num">13.377,18 €</td><td class="num">2.682,54 €</td><td class="num">10.694,64 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Nota: A comissão de gestão corresponde a 20% sobre a base líquida de IVA (6%), repartida em partes iguais pelos dois cogestores (10% cada). O valor líquido após comissão de gestão corresponde ao montante recebido após comissões de canal deduzido da comissão de gestão (antes de despesas operacionais de limpeza, lavandaria e consumíveis).</p>
+
+      <h3>B. Reservas Transitadas da Gestão Anterior (Smartavillas)</h3>
+      <p>Identificação das estadias confirmadas e executadas no início de 2026 ao abrigo da entidade gestora cessante, cujos proveitos e faturação não integraram o âmbito do presente contrato de gestão.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Origem</th><th>Canal</th><th>Hóspede</th><th>Período de Estadia</th><th class="num">Noites</th><th>Estado</th><th>Enquadramento Financeiro</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Transição Smartavillas</td><td>Smartavillas / Airbnb</td><td>Daniel Morris</td><td>13/02/2026 a 22/02/2026</td><td class="num">9</td><td>Concluída</td><td>Receita gerida pela entidade cessante</td></tr>
+            <tr><td>Transição Smartavillas</td><td>Smartavillas / Airbnb</td><td>Denise Hildebrand</td><td>22/02/2026 a 27/02/2026</td><td class="num">5</td><td>Concluída</td><td>Receita gerida pela entidade cessante</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>C. Reservas Canceladas</h3>
+      <p>Historial de anulações processadas no período. Todas as anulações ocorreram exclusivamente através da plataforma Booking.com, dentro dos prazos de cancelamento gratuito, sem qualquer penalização financeira ou receita retida.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>ID / Ref.</th><th>Canal</th><th>Titular</th><th>Período Previsto</th><th class="num">Noites</th><th>Data de Entrada</th><th>Data de Cancelamento</th><th class="num">Valor Bruto Anulado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>001-2025 (#6247202329)</td><td>Booking.com</td><td>Sandra Almeida</td><td>22/08/2026 a 29/08/2026</td><td class="num">7</td><td>02/12/2025</td><td>20/02/2026</td><td class="num">3.640,00 €</td></tr>
+            <tr><td>002-2026 (#5850828216)</td><td>Booking.com</td><td>Carlota Lima Raposo</td><td>25/07/2026 a 31/07/2026</td><td class="num">6</td><td>01/01/2026</td><td>02/01/2026</td><td class="num">—</td></tr>
+            <tr><td>004-2026 (#5965770268)</td><td>Booking.com</td><td>Margarida Gomes Veloso</td><td>23/07/2026 a 26/07/2026</td><td class="num">3</td><td>15/02/2026</td><td>18/05/2026</td><td class="num">—</td></tr>
+            <tr><td>006-2026 (#5586840547)</td><td>Booking.com</td><td>Álvaro Ferreira Marques</td><td>19/08/2026 a 26/08/2026</td><td class="num">7</td><td>08/03/2026</td><td>11/06/2026</td><td class="num">—</td></tr>
+            <tr><td>009-2026 (#6450359920)</td><td>Booking.com</td><td>Maria Felício</td><td>26/07/2026 a 03/08/2026</td><td class="num">8</td><td>25/04/2026</td><td>26/04/2026</td><td class="num">4.862,00 €</td></tr>
+            <tr><td>#5111703925</td><td>Booking.com</td><td>Cliente Booking.com</td><td>26/08/2026 a —</td><td class="num">—</td><td>23/07/2026</td><td>23/07/2026 <em>(no próprio dia)</em></td><td class="num">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>D. Consultas de Alojamento Local (Não Convertidas em Reserva)</h3>
+      <p>Registo dos pedidos de informação, cotações e consultas diretas recebidas que não resultaram em reservas efetivas, com a indicação do respetivo ponto de situação.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Data do Pedido</th><th>Interessado</th><th>Canal</th><th>Período Pretendido</th><th class="num">Noites</th><th class="num">Valor Proposto</th><th>Desfecho</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>14/12/2025</td><td>Filipe Avides Moreira</td><td>Direto (E-mail)</td><td>08/08/2026 a 15/08/2026</td><td class="num">7</td><td class="num">Proposta enviada</td><td>Sem resposta; datas reabertas a 18/12/2025.</td></tr>
+            <tr><td>13/01/2026</td><td>Carolina Cabral</td><td>Direto (E-mail)</td><td>25/07/2026 a 02/08/2026</td><td class="num">8</td><td class="num">4.900,00 €</td><td>Sem pagamento de sinal; datas reabertas a 16/01/2026.</td></tr>
+            <tr><td>20/04/2026</td><td>Sílvia Chambel (extensão)</td><td>Direto (E-mail)</td><td>06/09/2026 a 10/09/2026</td><td class="num">4</td><td class="num">—</td><td>Pedido de unidade adicional para 2 pessoas; indisponibilidade na zona.</td></tr>
+            <tr><td>21/05/2026</td><td>Madalena Belo / Castro</td><td>Direto (E-mail)</td><td>25/07/2026 a 01/08/2026</td><td class="num">7</td><td class="num">3.720,00 €</td><td>Desistência; datas libertadas a 23/05/2026.</td></tr>
+            <tr><td>22/08/2026</td><td>Bryony Lowe</td><td>Agência de Viagens</td><td>Agosto de 2026</td><td class="num">—</td><td class="num">—</td><td>Desistência por impedimento de viagem de um hóspede; datas levantadas a 29–30/08/2026.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>E. Avaliações e Satisfação dos Hóspedes</h3>
+      <p>Síntese das avaliações recebidas após as estadias concluídas em 2026 (através do questionário próprio de satisfação da Ria Endless South e das plataformas de reserva), evidenciando a classificação global máxima (5/5 estrelas, NPS 10/10 e pontuação 10/10 — Excecional na Booking.com) e os principais aspetos destacados pelos hóspedes:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Período de Estadia</th><th>Hóspede / Reserva</th><th>Canal de Avaliação</th><th>Classificação</th><th>Aspetos Mais Apreciados</th><th>Observações / Sugestões de Melhoria</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>30/04 a 03/05/2026 (3 noites)</td><td>Mafalda Nogueira (Reserva 008-2026 — Direta)</td><td>Questionário Próprio (03/05/2026), Google e Facebook</td><td>★★★★★ (5/5) • NPS 10/10</td><td>Casa espaçosa, muito bem equipada, limpa e confortável; acesso direto ao trilho até à Ria/praia; tranquilidade e envolvente natural.</td><td>Sugestão de sofás mais confortáveis na sala de estar.</td></tr>
+            <tr><td>04/08 a 11/08/2026 (7 noites)</td><td>Inês Simão / Maria do Carmo Simão (Reserva 003-2026 — Direta)</td><td>Questionário Próprio (15/08/2026)</td><td>★★★★★ (5/5) • NPS 10/10</td><td>Dimensão dos quartos e amplitude da casa, alpendre, cozinha, limpeza, sossego, proximidade a Cabanas e apoio prestado pela gestão.</td><td>Sugestão de cama adicional no quarto mais pequeno, chuveiro mais acessível e controlo preventivo de formigas.</td></tr>
+            <tr><td>16/08 a 19/08/2026 (3 noites)</td><td>Carina Albuquerque (Reserva 011-2026 — Booking.com)</td><td>Booking.com</td><td>10/10 (Excecional)</td><td>Classificação máxima atribuída na plataforma Booking.com, acompanhada do comentário: «Amazing house, with incredible location».</td><td>Sem observações registadas.</td></tr>
+            <tr><td>19/08 a 22/08/2026 (3 noites)</td><td>Jose Luis Castellano Lopez (Reserva 010-2026 — Airbnb)</td><td>Airbnb (22/08/2026)</td><td>★★★★★ (5/5)</td><td>Alojamento descrito como «espetacular», mobiliário e rouparia impecáveis, cozinha e casas de banho extremamente limpas.</td><td>Sugestão de instalação de pequena piscina para complementar a propriedade.</td></tr>
+            <tr><td>31/08 a 06/09/2026 (6 noites)</td><td>Sílvia Chambel (Reserva 005-2026 — Direta)</td><td>Questionário Próprio (18/09/2026)</td><td>★★★★★ (5/5) • NPS 10/10</td><td>Organização da casa (cada quarto com casa de banho privativa), limpeza, melhoria na iluminação noturna do percurso, rapidez/cuidado na comunicação da nova gestão (face à agência anterior) e acesso direto à Ria.</td><td>Sugestão de vedação com silicone nas tomadas da cozinha (formigas) e disponibilidade de bicicletas para passeios na quinta e ciclovia.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 3 -->
+    <section class="sec" id="sec3">
+      <h2>3. Propostas de Eventos com Alojamento (Casamentos)</h2>
+      <p>Resumo das propostas comerciais estruturadas para a realização de eventos com ocupação conjunta de alojamento na propriedade.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Cliente</th><th>Data Prevista</th><th>Âmbito da Proposta</th><th class="num">Valor Global (IVA incl.)</th><th class="num">Caução</th><th>Situação Atual</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Bruna Martins</td><td>25/09/2027 <em>(AL: 24 a 27/09/2027)</em></td><td>3 noites de AL (até 8 hóspedes) + espaço exterior para casamento até 60 convidados (pátio da casa-mãe e alpendre da biblioteca).</td><td class="num">5.000,00 € <em>(1.800 € AL + 3.200 € espaço)</em></td><td class="num">1.000,00 €</td><td>Datas reabertas a 26/10/2026 por falta de liquidação do sinal inicial de 1.000,00 € até 24/10/2026.</td></tr>
+            <tr><td>Andrea</td><td>Maio de 2028</td><td>3 noites de AL (até 8 hóspedes) + evento até 150 convidados, incluindo zona do Altar e acesso exterior limitado a 3 ha em "L".</td><td class="num">19.000,00 € <em>(1.800 € AL + 17.200 € espaço)</em></td><td class="num">2.000,00 €</td><td>Proposta enviada a 09/10/2026; aguarda decisão da cliente.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 4 -->
+    <section class="sec" id="sec4">
+      <h2>4. Gestão de Reservas Não Faturadas e Datas Bloqueadas</h2>
+      <p>Esta secção reúne exclusivamente os períodos sob gestão operacional de ocupação (estadias não faturadas e bloqueios de calendário na unidade de AL/Casa Mãe, acrescidos da única estadia na Biblioteca que envolveu gestão operacional completa de limpeza e lavandaria).</p>
+
+      <h3>A. Proprietários e Cortesia (Com Gestão Operacional)</h3>
+      <p>Estadias de âmbito privado, institucional ou de cortesia que exigiram coordenação de serviços operacionais por parte da equipa de gestão.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>ID / Ref.</th><th>Período</th><th class="num">Noites</th><th>Enquadramento</th><th>Espaço</th><th>Limpeza</th><th>Lavandaria</th><th>Ocupação Efetiva (Critério Lavandaria)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>000-2025</td><td>28/03/2026 a 04/04/2026</td><td class="num">7</td><td>Uso próprio — Gabriela e Pedro Costa</td><td>AL / Casa Mãe</td><td>Com limpeza</td><td>Com lavandaria (07/04/2026)</td><td>Com ocupação</td></tr>
+            <tr><td>—</td><td>28/09/2026 a 05/10/2026</td><td class="num">7</td><td>Uso próprio — Proprietários</td><td>Biblioteca</td><td>Com limpeza (limpeza profunda)</td><td>Com lavandaria (fecho set./out.)</td><td>Com ocupação</td></tr>
+            <tr><td>013-2026</td><td>05/11/2026 a 12/11/2026</td><td class="num">7</td><td>Cortesia — Laura Paredes (visita técnica / decoração)</td><td>AL / Casa Mãe</td><td>Com limpeza (fatura 18/11/2026)</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>007-2026</td><td>20/03/2027 a 27/03/2027</td><td class="num">7</td><td>Uso próprio — Gabriela e Pedro Costa</td><td>AL / Casa Mãe</td><td>Reserva futura</td><td>Reserva futura</td><td>Reserva futura</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B. Datas Bloqueadas (Transição, Obras e Manutenção)</h3>
+      <p>Intervencionamentos no calendário motivados por razões operacionais, obras de beneficiação, manutenção preventiva e períodos de transição de gestão.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Período</th><th class="num">Noites</th><th>Motivo do Bloqueio</th><th>Limpeza</th><th>Lavandaria</th><th>Ocupação Efetiva (Critério Lavandaria)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>10/02/2026 a 13/02/2026</td><td class="num">3</td><td>Transição de gestão</td><td>Sem limpeza</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>27/02/2026 a 05/03/2026</td><td class="num">6</td><td>Passagem de gestão, inventário e entrega de chaves</td><td>Sem limpeza</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>25/03/2026 a 28/03/2026</td><td class="num">3</td><td>Preparação inicial para arranque da operação</td><td>Sem limpeza</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>18/05/2026 a 27/05/2026</td><td class="num">9</td><td>Obras e manutenção técnica</td><td>Sem registo</td><td>Com lavandaria (têxteis de obras — 01/06/2026)</td><td>Com ocupação (com lavandaria)</td></tr>
+            <tr><td>11/08/2026 a 13/08/2026</td><td class="num">2</td><td>Visita técnica — redecoração</td><td>Com limpeza / preparação</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>23/11/2026 a 29/11/2026</td><td class="num">6</td><td>Obras e manutenção técnica</td><td>Com limpeza ligeira (WC equipa de obra)</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+            <tr><td>27/11/2026 a 02/12/2026</td><td class="num">5</td><td>Decoração e limpeza geral pós-obras</td><td>Com limpeza (pós-obras)</td><td>Sem lavandaria</td><td>Sem ocupação</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 5 -->
+    <section class="sec" id="sec5">
+      <h2>5. Nota Informativa: Ocupação Autónoma da Biblioteca</h2>
+      <p>Para efeitos de rigor documental, registam-se em separado as utilizações da Biblioteca sem intervenção da gestão de reservas e/ou gestão de ocupação (sem trabalho associado de reserva, check-in, limpeza ou lavandaria pela gestão):</p>
+      <h3>A. Utilizações da Biblioteca (Sem Gestão de Ocupação / Reservas)</h3>
+      <ul class="clean-list">
+        <li>25/07/2026 a 28/07/2026 (3 noites): Estadia Helena.</li>
+        <li>01/08/2026 a 08/08/2026 (7 noites): Estadia Célia e Dora.</li>
+        <li>11/08/2026 a 13/08/2026 (2 noites): Estadia Laura (decoração).</li>
+        <li>29/10/2026 a 31/10/2026 (2 noites): Estadia Helena.</li>
+        <li><strong>Total contabilizado na Biblioteca (sem gestão de ocupação): 14 noites.</strong></li>
+      </ul>
+    </section>
+
+    <!-- SECÇÃO 6 -->
+    <section class="sec" id="sec6">
+      <h2>6. Deslocações e Visitas Técnicas da Gestão (Ciclo Contratual 2025/2026)</h2>
+      <p>Registo detalhado das visitas técnicas mensais previstas no contrato de gestão (período 24/11/2025 a 23/11/2026), conciliando datas de realização, duração efetiva (dias e noites fora/em deslocação), valores apurados e respetivos documentos de faturação e comprovativos de deslocação. Os valores e documentos de faturação apresentados refletem os dados disponíveis a 21 de novembro de 2026, respeitantes às visitas técnicas e operações concluídas e faturadas até 8 de setembro de 2026 (ciclo de julho/agosto), correspondendo aos últimos dados disponíveis à data de emissão deste relatório.</p>
+
+      <h3>A. Mapa de Deslocações e Visitas Técnicas (Ciclo 24/11/2025 a 23/11/2026)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ciclo Contratual</th><th>Período Realizado / Previsto</th><th>Duração (Dias / Noites)</th><th>Responsável</th><th class="num">Valor Total</th><th>Discriminação e Documentos de Faturação</th><th>Estado / Âmbito da Intervenção</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>24/11 a 23/12/2025 <em>(Nov./Dez.)</em></td><td>24 e 25/11/2025</td><td>2 dias / 1 noite</td><td>Ana Sajara</td><td class="num">430,00 € <em>(298,40 € + comb.)</em></td><td><strong>FR ATSIRE01FR/5</strong> (298,40 €) + Faturas combustível Nov. 2025 (81,01 € + 50,60 € = 131,61 €)</td><td>Realizada — Vistoria inicial e coordenação de transição com a Smartavillas.</td></tr>
+            <tr><td>24/12/2025 a 23/01/2026 <em>(Dez./Jan.)</em></td><td>21 a 24/01/2026 <em>(visita Barroca: 22 e 23/01)</em></td><td>4 dias / 3 noites <em>(2 dias / 1 noite no local)</em></td><td>Carlos Almeida</td><td class="num">595,00 €</td><td><strong>FR ATSIRE01FR/2</strong> (595,00 €: 150,00 € honorários + 445,00 € deslocação; trajeto combinado c/ Lisboa)</td><td>Realizada — Vistoria de conformidade, contactos locais (Sofia, Cadilava, Eng. Diamantino).</td></tr>
+            <tr><td>24/01 a 23/02/2026 <em>(Jan./Fev.)</em></td><td>02 e 03/03/2026</td><td>2 dias / 1 noite</td><td>Ana Sajara</td><td class="num">430,00 €</td><td><strong>FR ATSIRE01FR/7</strong> (360,99 €) + Fatura combustível (69,01 €) <em>(150,00 € serv. presencial + 280,00 € deslocação)</em></td><td>Realizada — Entrega de chaves e conferência de inventário de transição de gestão.</td></tr>
+            <tr><td>24/02 a 23/03/2026 <em>(Fev./Mar. — 4.º Ciclo)</em></td><td>20 a 30/03/2026</td><td>11 dias / 10 noites <em>(8 dias de trabalho no local)</em></td><td>Carlos Almeida</td><td class="num">1.245,00 € <em>(595,00 € visita AL + 650,00 € trab. adicionais)</em></td><td><strong>FR ATSIRE01FR/5</strong> (09/04/2026 — 1.245,00 €: 597,50 € mão de obra + 647,50 € deslocação/despesas; inclui 595,00 € visita base AL + 650,00 € trabalhos adicionais no terreno)</td><td>Realizada — Gestão de AL e trabalhos adicionais de manutenção no terreno (portão, floreiras, drenagens, preparação estadia proprietários).</td></tr>
+            <tr><td>24/03 a 23/04/2026 <em>(Mar./Abr.)</em></td><td>21 a 23/04/2026</td><td>3 dias / 2 noites</td><td>Ana Sajara</td><td class="num">430,00 €</td><td><strong>FR ATSIRE01FR/12</strong> (376,55 € — substituiu FR ATSIRE01FR/10 anulada) + Fatura combustível (53,45 €)</td><td>Realizada — Reorganização operacional, compras, equipa limpeza, horta e percurso pedestre.</td></tr>
+            <tr><td>24/04 a 23/05/2026 <em>(Abr./Mai. — 6.º Ciclo)</em></td><td>28/04 a 04/05/2026 <em>(extraordinária)</em> e 15 a 31/05/2026</td><td>7 dias / 6 noites <em>(extra)</em> + 17 dias / 16 noites <em>(mai.)</em></td><td>Carlos Almeida</td><td class="num"><strong>0,00 € (extra abr./mai.)</strong> + <strong>2.760,00 € (mai./jun.)</strong></td><td><strong>Extra abr./mai.:</strong> 0,00 € imputado à Barroca (400,00 € cobrados apenas à Obra Graça).<br><strong>Mai./Jun.: FR ATSIRE01FR/11</strong> (05/06/2026 — 2.760,00 € ao NIF 704738287: 595,00 € visita base AL + 2.165,00 € acompanhamento obras/propriedade, incl. 400,00 € Obra Graça)</td><td>Realizada — Preparação 1.ª reserva direta (30/04) e acompanhamento presencial de obras na Barroca (Sr. Hugo Gomes e Daniel), em trajeto combinado com a Obra da Graça.</td></tr>
+            <tr><td>24/05 a 23/06/2026 <em>(Mai./Jun. — 7.º Ciclo / Substituição)</em></td><td>20/06 a 02/07/2026</td><td>13 dias / 12 noites <em>(14 dias corridos)</em></td><td>Carlos Almeida <em>(substituiu Ana Sajara)</em></td><td class="num"><strong>0,00 €</strong> imputado à Barroca (800,00 € cobrados apenas à Obra Graça)</td><td>Sem faturação à Barroca (800,00 € cobrados exclusivamente à Obra Graça; substituição da visita de Ana Sajara e intervenções técnicas na Barroca assumidas sem custo pelo gestor, conforme relatório de 08/07/2026)</td><td>Realizada (Substituição) — Manutenção, segurança (deteção fumo/CO2), Releve, Biopiscinas, ortomosaico drone e Biblioteca.</td></tr>
+            <tr><td>24/06 a 23/07/2026 <em>(Jun./Jul. — reposição)</em></td><td>02 a 04/08/2026</td><td>3 dias / 2 noites</td><td>Ana Sajara <em>(repôs substituição)</em></td><td class="num">430,00 €</td><td><strong>FR ATSIRE01FR/16</strong> (324,99 €) + Faturas combustível (85,01 € + 20,00 € = 105,01 €) <em>(150,00 € serv. + 280,00 € desl.)</em></td><td>Realizada (Reposição) — Encomendas, rouparia e preparação operacional das entradas de agosto.</td></tr>
+            <tr><td>24/07 a 23/08/2026 <em>(Jul./Ago.)</em></td><td>05 a 08/09/2026</td><td>4 dias / 3 noites</td><td>Ana Sajara</td><td class="num">430,00 €</td><td><strong>FR ATSIRE01FR/19</strong> (380,00 €) + Fatura combustível BP <strong>FS 272531008/281140</strong> (50,00 €) <em>(150,00 € serv. + 280,00 € desl.)</em></td><td>Realizada — Balanço pós-época alta, instalação de quadro de Leite Rio (07/09) e levantamento técnico de manutenção.</td></tr>
+            <tr><td>24/08 a 23/09/2026 <em>(Ago./Set.)</em></td><td>Final de set. / início de out. 2026</td><td>2 dias / 1 noite <em>(previsto)</em></td><td>Carlos Almeida</td><td class="num">595,00 € <em>(valor contratual base)</em></td><td>Sem documento de faturação emitido</td><td>Prevista no plano — Vistoria de outono e manutenção preventiva (sem registo de conclusão).</td></tr>
+            <tr><td>24/09 a 23/10/2026 <em>(Set./Out.)</em></td><td>Out. / início de nov. 2026</td><td>2 dias / 1 noite <em>(previsto)</em></td><td>Ana Sajara</td><td class="num">430,00 € <em>(valor contratual base)</em></td><td>Sem documento de faturação emitido</td><td>Não concretizada por rescisão de contrato (comunicada a 23/10/2026 com efeitos a 23/11/2026).</td></tr>
+            <tr><td>24/10 a 23/11/2026 <em>(Out./Nov.)</em></td><td>Nov. / início de dez. 2026</td><td>2 dias / 1 noite <em>(previsto)</em></td><td>Carlos Almeida</td><td class="num">595,00 € <em>(valor contratual base)</em></td><td>Sem documento de faturação emitido</td><td>Prevista no plano — Vistoria de fecho do 1.º ano de contrato, balanço global e inventário anual (sem registo de conclusão).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Nota: Nos termos da calendarização contratual de visitas (12 ciclos mensais de 24/11/2025 a 23/11/2026), as deslocações regulares de Ana Sajara têm o valor base de 430,00 € (150,00 € de serviço presencial + 280,00 € de deslocação, compostos por recibo verde e faturas de combustível) e as de Carlos Almeida o valor base de 595,00 € (150,00 € de honorários + 445,00 € de deslocação). As duas deslocações extraordinárias de Carlos Almeida (28/04 a 04/05/2026 e 20/06 a 02/07/2026) foram liquidadas via Obra da Graça (400,00 € e 800,00 €, respetivamente), cobrindo na conciliação global a componente contratual das visitas de gestão.</p>
+
+      <h3>B. Quadro Síntese de Remuneração da Gestão vs. Encargos de Propriedade e Obras</h3>
+      <p>Apresenta-se de seguida a demonstração discriminada e conciliada dos valores auferidos pela equipa de gestão, distinguindo a separação contabilística e operacional entre: (i) os rendimentos contratuais diretamente derivados da gestão de Alojamento Local (comissões de 20% sobre as reservas efetuadas e liquidadas + visitas técnicas mensais estipuladas no contrato — 430,00 € para Ana Sajara e 595,00 € para Carlos Almeida) e (ii) os valores excedentes faturados decorrentes de trabalhos adicionais de manutenção no terreno, acompanhamento presencial de obras de beneficiação e encargos gerais da propriedade (incluindo as verbas respeitantes à Obra da Graça faturadas centralizadamente no documento FR ATSIRE01FR/11). Os valores e documentos de faturação apresentados refletem os dados disponíveis a 21 de novembro de 2026, referentes às operações concluídas e faturadas até 8 de setembro de 2026, correspondendo aos últimos dados disponíveis à data de emissão deste relatório.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Rubrica / Verba</th><th class="num">Ana Sajara</th><th class="num">Carlos Almeida</th><th class="num">Total Consolidado</th><th>Enquadramento e Comprovativos</th></tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><td colspan="5">1. HONORÁRIOS EFETIVOS DE GESTÃO AL</td></tr>
+            <tr><td><strong>1.1. Comissões de Gestão AL</strong> <em>(20% s/ reservas concluídas 2026)</em></td><td class="num"><strong>1.046,93 €</strong></td><td class="num"><strong>1.046,93 €</strong></td><td class="num"><strong>2.093,86 €</strong></td><td>20% sobre base líquida de IVA (10.469,28 €), repartidos em 10% para cada cogestor (reservas 008, 003, 011, 010 e 005-2026). <em>(Exclui 588,68 € previstos para a reserva futura 012-2026 de 2027).</em></td></tr>
+            <tr><td><strong>1.2. Honorários de Visitas Técnicas AL</strong> <em>(serviço presencial: 150,00 €/visita)</em></td><td class="num"><strong>750,00 €</strong><br><em>(5 visitas × 150,00 €)</em></td><td class="num"><strong>750,00 €</strong><br><em>(5 visitas × 150,00 €)</em></td><td class="num"><strong>1.500,00 €</strong><br><em>(10 visitas cobertas)</em></td><td><strong>Ana Sajara:</strong> 5 visitas (nov./25, mar./26, abr./26, ago./26 e set./26 — FR5, FR7, FR12, FR16, FR19).<br><strong>Carlos Almeida:</strong> 3 ciclos faturados diretamente na Barroca (jan./26 FR2, mar./26 FR5, mai./26 FR11) + 2 deslocações (abr./mai. e jun./jul., esta última em substituição de Ana Sajara) liquidadas via Obra da Graça (400,00 € e 800,00 €).</td></tr>
+            <tr class="subtotal"><td>SUBTOTAL A — Honorários Efetivos de Gestão AL (1.1 + 1.2)</td><td class="num">1.796,93 €</td><td class="num">1.796,93 €</td><td class="num">3.593,86 €</td><td>Remuneração efetiva auferida pelo serviço de gestão do Alojamento Local (em igualdade entre cogestores).</td></tr>
+            <tr class="group-row"><td colspan="5">2. CUSTOS DE DESLOCAÇÃO CONTRATUAIS AL</td></tr>
+            <tr><td><strong>2.1. Reembolso / Despesas de Deslocação AL</strong> <em>(km/combustível: 280,00 € Ana / 445,00 € Carlos)</em></td><td class="num"><strong>1.400,00 €</strong><br><em>(5 visitas × 280,00 €)</em></td><td class="num"><strong>2.225,00 €</strong><br><em>(5 visitas × 445,00 €)</em></td><td class="num"><strong>3.625,00 €</strong><br><em>(10 deslocações)</em></td><td><strong>Ana Sajara:</strong> 5 × 280,00 € (combustível + parcela deslocação).<br><strong>Carlos Almeida:</strong> 5 × 445,00 € (3 ciclos faturados na Barroca + 2 deslocações liquidadas via Obra da Graça).</td></tr>
+            <tr class="subtotal"><td>SUBTOTAL B — Total Contratual de Gestão AL (1 + 2)</td><td class="num">3.196,93 €</td><td class="num">4.021,93 €</td><td class="num">7.218,86 €</td><td>Total pago/coberto no âmbito contratual do Alojamento Local (honorários + deslocações estipuladas).</td></tr>
+            <tr class="group-row"><td colspan="5">3. ENCARGOS DE PROPRIEDADE, MANUTENÇÃO E OBRAS</td></tr>
+            <tr><td><strong>3.1. Excedente Faturado — Manutenção, Obras e Propriedade</strong></td><td class="num"><strong>0,00 €</strong></td><td class="num"><strong>2.825,00 €</strong></td><td class="num"><strong>2.825,00 €</strong></td><td><strong>• Mar./Abr. 2026 (FR ATSIRE01FR/5):</strong> 650,00 € acima dos 595,00 € base (manutenção no terreno).<br><strong>• Mai./Jun. 2026 (FR ATSIRE01FR/11):</strong> 2.165,00 € acima dos 595,00 € base (1.765,00 € obras Barroca + 400,00 € Obra Graça).<br><strong>• Saldo deslocações Abr./Mai. e Jun./Jul. (1.200,00 € pagos via Graça vs. 1.190,00 € base AL):</strong> +10,00 €.</td></tr>
+            <tr class="total"><td>TOTAL GERAL PAGO / APURADO (1 + 2 + 3)</td><td class="num">3.196,93 €</td><td class="num">6.846,93 €</td><td class="num">10.043,86 €</td><td>Conciliação integral dos valores pagos (Barroca 8.843,86 € + deslocações liquidadas via Obra da Graça 1.200,00 €).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Nota: Nas duas deslocações extraordinárias de Carlos Almeida (28/04 a 04/05/2026 e 20/06 a 02/07/2026 — esta última em substituição da visita mensal de Ana Sajara), os valores cobrados via Obra da Graça (400,00 € e 800,00 €, respetivamente) cobriram na conciliação global a componente contratual das visitas de gestão, tendo os restantes materiais, peças e esforço operacional adicional no terreno sido integralmente assumidos pelo gestor sem faturação extra à propriedade.</p>
+
+      <h3>C. Síntese Conciliada de Execução, Valores Estipulados e Encargos Extra (até 08/09/2026)</h3>
+      <p>Apresenta-se em seguida a síntese conciliada entre a execução real de deslocações, os valores contratuais estipulados e os encargos adicionais apurados até 8 de setembro de 2026:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Indicador / Rubrica Conciliada</th><th class="num">Ana Sajara</th><th class="num">Carlos Almeida</th><th class="num">Total Consolidado</th><th>Enquadramento / Observação</th></tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><td colspan="5">A. EXECUÇÃO DE DESLOCAÇÕES (CICLO 2025/2026)</td></tr>
+            <tr><td><strong>Visitas previstas no contrato</strong></td><td class="num">6 visitas</td><td class="num">6 visitas</td><td class="num">12 visitas</td><td>Plano mensal alternado (2025-11-24 a 2026-11-23).</td></tr>
+            <tr><td><strong>Visitas efetuadas e pagas (até 08/09/2026)</strong></td><td class="num">5 deslocações</td><td class="num">5 deslocações</td><td class="num">10 deslocações</td><td><strong>Ana Sajara:</strong> 5 deslocações realizadas e faturadas à Barroca.<br><strong>Carlos Almeida:</strong> 3 ciclos faturados na Barroca + 2 deslocações (abr./mai. e jun./jul., esta última em substituição de Ana Sajara) liquidadas via Obra da Graça.</td></tr>
+            <tr><td><strong>Ciclos sem dados / não concretizados</strong></td><td class="num">1 visita em falta<br><em>(rescisão de contrato)</em></td><td class="num">2 ciclos finais<br><em>(sem dados)</em></td><td class="num">—</td><td><strong>Ana Sajara:</strong> não concretizada por rescisão de contrato.<br><strong>Carlos Almeida:</strong> ciclos finais sem registo de concretização nos dados disponíveis à data de apuramento.</td></tr>
+            <tr class="group-row"><td colspan="5">B. VALORES CONTRATUAIS ESTIPULADOS NAS VISITAS EFETUADAS (ATÉ 08/09/2026)</td></tr>
+            <tr><td><strong>Honorários estipulados de visita (150,00 €/visita)</strong></td><td class="num">750,00 € <em>(5 × 150,00 €)</em></td><td class="num">750,00 € <em>(5 × 150,00 €)</em></td><td class="num">1.500,00 €</td><td>Valor base estipulado nas 5 visitas efetuadas por cada cogestor (em igualdade total).</td></tr>
+            <tr><td><strong>Deslocação estipulada de visita (280,00 € Ana / 445,00 € Carlos)</strong></td><td class="num">1.400,00 € <em>(5 × 280,00 €)</em></td><td class="num">2.225,00 € <em>(5 × 445,00 €)</em></td><td class="num">3.625,00 €</td><td>Componente de deslocação estipulada nas 5 deslocações efetuadas por cada cogestor.</td></tr>
+            <tr><td><strong>Subtotal das visitas efetuadas (valor estipulado)</strong></td><td class="num">2.150,00 €</td><td class="num">2.975,00 €</td><td class="num">5.125,00 €</td><td>Soma de honorários e deslocações estipulados nas 5 visitas efetuadas de cada cogestor.</td></tr>
+            <tr><td><strong>Comissões de Gestão AL (20% s/ reservas concluídas 2026)</strong></td><td class="num">1.046,93 €</td><td class="num">1.046,93 €</td><td class="num">2.093,86 €</td><td>20% sobre base líquida de IVA (10.469,28 €), repartidos em 10% para cada cogestor.</td></tr>
+            <tr class="subtotal"><td>SUBTOTAL CONTRATUAL AL (VISITAS EFETUADAS + COMISSÕES)</td><td class="num">3.196,93 €</td><td class="num">4.021,93 €</td><td class="num">7.218,86 €</td><td>Total correspondente às comissões AL e aos valores estipulados das visitas efetuadas até 08/09/2026.</td></tr>
+            <tr class="group-row"><td colspan="5">C. CONCILIAÇÃO COM ENCARGOS EXTRA E TOTAL PAGO</td></tr>
+            <tr><td><strong>Encargos extra de manutenção, obras e propriedade (Carlos Almeida)</strong></td><td class="num">0,00 €</td><td class="num">+2.825,00 €</td><td class="num">+2.825,00 €</td><td>650,00 € (FR ATSIRE01FR/5) + 2.165,00 € (FR ATSIRE01FR/11) + 10,00 € saldo deslocações Graça vs AL.</td></tr>
+            <tr class="total"><td>TOTAL GERAL PAGO / APURADO (ATÉ 08/09/2026)</td><td class="num">3.196,93 €</td><td class="num">6.846,93 €</td><td class="num">10.043,86 €</td><td>Conciliação integral dos valores pagos até 8 de setembro de 2026 (Barroca 8.843,86 € + Graça 1.200,00 € = 10.043,86 €).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>D. Enquadramento Operacional e Ajustes de Calendarização</h3>
+      <p>Ao longo do contrato, todas as frentes de trabalho foram acompanhadas conjuntamente por ambos os cogestores. O plano contratual de visitas técnicas mensais estipula 12 ciclos presenciais entre 24/11/2025 e 23/11/2026, com os valores base de 430,00 € para Ana Sajara (150,00 € de serviço presencial + 280,00 € de deslocação) e 595,00 € para Carlos Almeida (150,00 € de honorários + 445,00 € de deslocação).</p>
+      <p>No período de verão (junho a agosto de 2026), as deslocações foram ajustadas de forma pragmática às necessidades reais da operação: entre 20/06 e 02/07/2026, Carlos Almeida substituiu Ana Sajara na deslocação presencial (liquidada via Obra da Graça por 800,00 €), assegurando a continuidade técnica no terreno sem duplicar viagens. Nesse contexto, a 29/07/2026 foi apresentada uma proposta de conciliação orientada para a contenção de custos da propriedade e para a utilidade efetiva de cada visita presencial, prevendo concentrar a deslocação de julho em Carlos Almeida e atribuir 150,00 € a Ana Sajara pelo trabalho contínuo desenvolvido à distância desde abril até final de julho (detalhado na Secção 7). Não tendo essa proposta sido acolhida pelos proprietários, retomou-se o plano contratual de compensação com a visita de reposição de Ana Sajara entre 02 e 04/08/2026 e a visita seguinte de 05 a 08/09/2026.</p>
+      <p>Quanto ao período final do contrato, em outubro de 2026 foi parcialmente combinado entre os proprietários e Carlos Almeida o agendamento de novas deslocações de manutenção — após informação em contrário —, sem registo de realização ou faturação até à data de emissão deste relatório; a última visita prevista para Ana Sajara (ciclo de 24/09 a 23/10/2026, prevista para outubro / início de novembro de 2026) não se concretizou na sequência da comunicação de rescisão contratual de 23/10/2026.</p>
+    </section>
+
+    <!-- SECÇÃO 7 -->
+    <section class="sec" id="sec7">
+      <h2>7. Balanço Global das Atividades Desenvolvidas (Novembro de 2025 a Novembro de 2026)</h2>
+      <p>Apresenta-se de seguida a síntese estruturada das atividades, sistemas, entregas técnicas e diligências desenvolvidas pela equipa de gestão ao longo do primeiro ano de contrato, agrupada em dois blocos principais consoante o respetivo enquadramento contratual e financeiro, e organizada por categoria de tipo de trabalho:</p>
+
+      <h3>A. Atividades no Âmbito Contratual da Gestão de AL</h3>
+      <p class="note" style="margin-top:0;">(Cobertas pela comissão de 20% sobre reservas e/ou pelas visitas mensais estipuladas)</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:22%;">Categoria / Tipo de Trabalho</th><th>Atividade / Entrega Realizada</th><th style="width:20%;">Enquadramento Contratual</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>1. Transição de Gestão &amp; Auditoria</strong></td><td>Passagem de testemunho com a entidade cessante (Smartavillas), conferência física e revisão do inventário inicial com a prestadora de limpeza (Ana Sofia Azevedo) nas diferentes divisões, exteriores e rouparia, formalização da declaração de entrega de chaves, preparação da entrada da nova gestão — incluindo a definição e concretização do sistema de etiquetas de identificação da rouparia (procura de fornecedores, encomenda, colocação e articulação de costura) — e auditoria aos anúncios antigos e duplicados (Smartavillas e GT House) em plataformas externas.</td><td>Visitas mensais estipuladas + Comissão de 20%</td></tr>
+            <tr><td><strong>2. Configuração de Canais &amp; Calendários</strong></td><td>Abertura e configuração das contas próprias em nome dos proprietários (Booking.com e Airbnb), parametrização e publicação dos anúncios do estabelecimento, configuração de regras tarifárias, políticas de cancelamento e sincronização de calendários entre plataformas e canais diretos.</td><td>Comissão de 20%</td></tr>
+            <tr><td><strong>3. Operação Comercial &amp; Gestão de Reservas</strong></td><td>Atendimento comercial (e-mail, WhatsApp, Booking.com e Airbnb), resposta a consultas e cotações, formalização das reservas confirmadas (008, 003, 011, 010, 005-2026 e 012-2026), receção e conferência de sinais e pagamentos finais, recolha de dados de hóspedes, definição e preparação do cabaz de boas-vindas, instruções de chegada, gestão de cauções, pedidos de avaliação, acompanhamento de cancelamentos e comunicação regular de faturas e documentos à contabilidade.</td><td>Comissão de 20%</td></tr>
+            <tr><td><strong>4. Prestadores Locais, Limpeza &amp; Lavandaria</strong></td><td>Prospeção, conferência de condições, negociação de orçamentos e articulação de propostas para os serviços locais de limpeza (Ana Sofia Azevedo) e lavandaria (Cadilava — simulação de custos por kg e mudas); estabelecimento de procedimentos operacionais (trabalho remoto e presencial durante as visitas), coordenação entre estadias, conferência de faturas, pagamentos via fundo de maneio e tentativas de calendarização de manutenção preventiva (face à ausência de rotina fixa estabilizada pela propriedade).</td><td>Comissão de 20% + Visitas mensais estipuladas</td></tr>
+            <tr><td><strong>5. Conformidade Legal &amp; Fiscalidade Corrente</strong></td><td>Atualização da apólice de seguro de responsabilidade civil (Ageas n.º 008410223368) no Balcão do Empreendedor / Câmara Municipal de Tavira (março 2026); deteção da ausência da ligação obrigatória para o Livro de Reclamações Eletrónico (LRE) no website e verificação de registo junto da plataforma; pedidos de credenciais e reportes SIBA/SEF; apuramento e envio à contabilidade dos formulários RF21 e certificados fiscais de não residentes (Airbnb e Booking.com) para Modelo 30; elaboração e atualização da reconciliação documental e contabilística do Fundo de Maneio e faturas de prestadores (para fecho e prestação de contas).</td><td>Comissão de 20%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B. Projetos, Estruturação e Iniciativas Fora do Âmbito Contratual AL</h3>
+      <p class="note" style="margin-top:0;">(Desenvolvidos pela equipa de gestão sem remuneração autónoma, com exceção do acompanhamento presencial de obras faturado + trabalhos técnicos de Carlos Almeida faturados à parte)</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th style="width:22%;">Categoria / Tipo de Trabalho</th><th>Atividade / Entrega Realizada</th><th style="width:22%;">Responsável</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>1. Arquitetura de Sistemas &amp; Automação</strong></td><td>Conceção e implementação da arquitetura multicanal de comunicação (Gmail + WhatsApp Business + folha de controlo de fluxo), criação de 13 etiquetas de estado, configuração de scripts de automação no Gmail (Templates.gs / Ria Endless South Composer), e desenvolvimento da aplicação interna de reservas e ocupação (Ria Endless South - Reservas — solução inicial sem custos em alternativa a um channel manager).</td><td>Carlos Almeida (arquitetura multicanal e configurações Gmail) e Ana Sajara (aplicação de reservas)</td></tr>
+            <tr><td><strong>2. Modelo Editorial, Redação e Fluxo de Comunicação de Reservas</strong></td><td>Definição do tom de voz da marca, redação/revisão editorial da matriz completa de 22 modelos de comunicação (R01 a R09, M01 a M10 e S01 a S03) baseados no fluxo real de atendimento para reservas diretas, pré-chegada, estadia, check-out, cauções e incidentes, além de respostas personalizadas a consultas comerciais; criação e integração de formulários digitais de recolha e arquivo de fichas de hóspedes; e criação de site interno de compras e informação de cabaz.</td><td>Ana Sajara (modelo real de comunicação, revisão editorial, fichas de hóspedes e site interno de compras/cabaz) e Carlos Almeida (configuração no sistema)</td></tr>
+            <tr><td><strong>3. Gestão de Acessos, Chaves &amp; Cofres</strong></td><td>Criação e implementação do sistema de identificação de chaves por cores (Cozinha, Entrada Norte, Entrada Sul e Quarto Sul) e gravação de etiquetas de frações, duplicação de chaves de segurança, organização dos cofres exteriores (portão norte e entrada), protocolo de rotação e envio temporizado de códigos de acesso e instalação de módulo remoto de abertura do portão principal.</td><td>Carlos Almeida (implementação do sistema de cores, gravação e automação) e Ana Sajara (protocolo de cores e códigos)</td></tr>
+            <tr><td><strong>4. Manutenção, Obras &amp; Infraestrutura</strong></td><td>Levantamento técnico e documento descritivo do percurso pedestre para orçamento; acompanhamento presencial de obras e manutenção estrutural (trabalhos técnicos adicionais no 4.º ciclo e acompanhamento de obras no 6.º ciclo faturados à parte, além das deslocações extraordinárias de abril/maio e junho/julho); instalação de deteção de fumo e CO2; levantamento fotogramétrico/ortomosaico com drone; registo fotográfico e de vídeo de estado e manutenção; articulação técnica com fornecedores especializados (Releve) e diligências de manutenção preventiva.</td><td>Carlos Almeida (obras, drone, segurança e terreno) e Ana Sajara (percurso pedestre e reportes)</td></tr>
+            <tr><td><strong>5. Horta, Pomar &amp; Espaços Exteriores</strong></td><td>Na sequência da decisão dos proprietários de avançar com a instalação da horta, a plantação de pomar de citrinos e árvores de fruto e os arranjos de canteiros exteriores, elaboração da proposta inicial, negociação e articulação do orçamento com o Eng.º Diamantino Trindade (março 2026), acompanhamento da execução e articulação com a equipa de jardinagem.</td><td>Ana Sajara e Carlos Almeida</td></tr>
+            <tr><td><strong>6. Equipamento da Casa, Enxoval &amp; Logística</strong></td><td>Levantamento de necessidades, pesquisa de fornecedores, quadros comparativos, encomendas e compras presenciais (enxoval e almofadas Hotelar 2026-004, mobiliário exterior Espaço Casa, suportes de malas vidaXL, equipamentos de cozinha, limpeza e iluminação exterior IKEA/Worten/Action/Xiaomi, estudo de colchão e estrado da Biblioteca), triagem e organização do roupeiro e espaços da Biblioteca, logística presencial de recolha, etiquetagem, lavandaria e devolução para expedição, e gestão do Fundo de Maneio (aplicado maioritariamente em equipamento e melhorias estruturais da casa, para além dos consumíveis correntes).</td><td>Ana Sajara e Carlos Almeida</td></tr>
+            <tr><td><strong>7. Conteúdos de Acolhimento &amp; Identidade</strong></td><td>Elaboração de propostas e versões de trabalho do Livro de Informações / Guest Book pelos dois cogestores para futura conciliação da versão final; criação de molduras informativas para a casa (sugestões pelos dois cogestores e versão final provisória); guia digital de experiências locais; levantamento fotográfico e de vídeo para divulgação; e propostas gráficas para conclusão de imagem (incluindo sugestões gráficas referentes ao vale de aniversário).</td><td>Ana Sajara e Carlos Almeida</td></tr>
+            <tr><td><strong>8. Consultoria, Pareceres &amp; Integração Técnica</strong></td><td>Consulta formal à Ageas (apólice n.º 008410223368) e a agente de seguros sobre cobertura de responsabilidade civil para disponibilização de bicicletas aos hóspedes (enquanto potencial oferta comercial) e levantamento de soluções locais de aluguer; integração técnica da ligação obrigatória ao Livro de Reclamações Eletrónico (LRE) no website (riaendlesssouth.com); parecer técnico sobre o enquadramento legal/ICNF e seguro da Biopiscina no âmbito da exploração do AL (e-mail de 14/10/2026); elaboração e entrega do parecer técnico escrito sobre o Projeto de Decoração (Apreciação ao Relatório de Decoração — Quinta da Barroca, 19/10/2026) e partilha do inventário auditado com a equipa de decoração.</td><td>Ana Sajara (seguros bicicletas e pareceres técnicos) e Carlos Almeida (integração LRE, seguros e inventário)</td></tr>
+            <tr><td><strong>9. Propostas Comerciais de Fidelização &amp; Animação</strong></td><td>Conceção e desenvolvimento do Programa de Fidelização de Hóspedes (Oferta de Aniversário com vale de 125,00 €); conceção e trabalho preparatório do Workshop de Escrita Criativa na Natureza (incluindo programa, estrutura e aplicação em site com imagens da Barroca, reservado para eventual desenvolvimento futuro caso se mantivesse essa intenção).</td><td>Ana Sajara (conceção e desenvolvimento) e Carlos Almeida (acompanhamento)</td></tr>
+            <tr><td><strong>10. Estruturação &amp; Propostas de Eventos na Propriedade (Casamentos)</strong></td><td>Estruturação financeira e comercial, revisão de minuta contratual, guia de condições e elaboração das propostas para eventos e casamentos na nova área exterior delimitada da propriedade (Bruna Martins — 5.000,00 € — e Andrea — 19.000,00 €).</td><td>Ana Sajara (estruturação e redação) e Carlos Almeida (acompanhamento)</td></tr>
+            <tr><td><strong>11. Comunicação no Instagram &amp; Registo Audiovisual</strong></td><td>Atividade não concertada ao longo do contrato, uma vez que a gestão de redes sociais e a criação de conteúdos para o Instagram não constam do âmbito estrito da gestão de reservas e visitas técnicas de AL. Ainda assim, realizaram-se publicações ao longo do período, apoiadas na recolha contínua de fotografias, vídeo e captação aérea por drone efetuada por Carlos Almeida. Nos registos apurados de 04/08 a 20/10/2026, contabilizam-se 11 publicações da equipa de gestão, com um total de 2.688 visualizações, centradas sobretudo na reutilização de imagens e em momentos de referência como o 2.º aniversário e a mobilidade. O acervo audiovisual recolhido não teve maior aproveitamento por ausência de estratégia e de alinhamento prévio para a comunicação do AL.</td><td>Ana Sajara e Carlos Almeida</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECÇÃO 8 -->
+    <section class="sec" id="sec8">
+      <h2>8. Prestação de Contas Operacionais, Fundo de Maneio e Síntese Patrimonial</h2>
+      <p>Apresenta-se de seguida o resumo consolidado da prestação de contas do Fundo de Maneio, da repartição dos custos operacionais e de equipamento, e do enquadramento do Inventário Geral, de forma a complementar o balanço de reservas, ocupação, visitas e atividades do presente contrato.</p>
+
+      <h3>A. Posição de Tesouraria do Fundo de Maneio</h3>
+      <p>Síntese das provisões recebidas dos proprietários, montantes liquidados através do fundo e saldo apurado sob custódia da gestão, acompanhada em anexo do mapa completo de custos, pagamentos e movimentos do Fundo de Maneio (com a conta de Ana Sajara fechada e o respetivo saldo de 115,29 € devolvido na presente data, ficando os elementos relativos a Carlos Almeida sujeitos à sua verificação posterior):</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Rubrica / Conta</th><th class="num">Ana Sajara</th><th class="num">Carlos Almeida</th><th class="num">Total Consolidado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Provisões recebidas dos proprietários</strong></td><td class="num">2.000,00 €</td><td class="num">4.000,00 € <em>(após transferência interna de 500,00 € a 19/06/2026)</em></td><td class="num">6.000,00 €</td></tr>
+            <tr><td><strong>Pagamentos efetuados pelo Fundo de Maneio</strong></td><td class="num">1.884,71 €</td><td class="num">3.336,96 €</td><td class="num">5.221,67 €</td></tr>
+            <tr class="total"><td>Saldo atual sob custódia da gestão</td><td class="num">115,29 €</td><td class="num">663,04 €</td><td class="num">778,33 €</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B. Repartição dos Custos Operacionais e de Equipamento (5.553,77 €)</h3>
+      <p>Agrupamento das despesas registadas no mapa de custos operacionais e fundo de maneio (5.553,77 €, incluindo 332,10 € pagos diretamente pelos proprietários), evidenciando o peso da operação corrente face ao equipamento e intervenções estruturais da casa:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Categoria / Natureza da Despesa</th><th class="num">Valor</th><th>Peso / Enquadramento</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Limpeza e rouparia (Ana Sofia Azevedo e Cadilava)</strong></td><td class="num">2.449,26 €</td><td>44,1% — Operação corrente de limpeza entre estadias, limpezas pontuais e serviços de lavandaria/rouparia.</td></tr>
+            <tr><td><strong>Têxteis e equipamento da casa (Hotelar, IKEA, Worten, Espaço Casa, Hôma, JYSK, Action)</strong></td><td class="num">1.530,28 €</td><td>27,6% — Aquisição de enxoval, mobiliário exterior e equipamentos da casa de natureza duradoura/estrutural.</td></tr>
+            <tr><td><strong>Manutenção, segurança e obras (Leroy Merlin, Pavisequia, Tavilocks, fechaduras, portão)</strong></td><td class="num">724,25 €</td><td>13,0% — Materiais de reparação, ferragens, segurança e intervenções no imóvel.</td></tr>
+            <tr><td><strong>Consumíveis de acolhimento e estadia (Continente, Pingo Doce, welcome kits, café)</strong></td><td class="num">396,65 €</td><td>7,1% — Bens de consumo corrente associados às estadias e acolhimento de hóspedes.</td></tr>
+            <tr><td><strong>Comissões de gestão (liquidadas via fundo na reserva 005-2026)</strong></td><td class="num">234,44 €</td><td>4,2% — Parcela de comissão de gestão processada no movimento da reserva 005-2026.</td></tr>
+            <tr><td><strong>Serviços e outros movimentos</strong></td><td class="num">120,49 €</td><td>2,2% — Despesas diversas e serviços pontuais registados no mapa de custos.</td></tr>
+            <tr><td><strong>Etiquetas de identificação têxtil — Pinto &amp; Pinto (pago diretamente pelos proprietários)</strong></td><td class="num">98,40 €</td><td>1,8% — Aquisição de etiquetas de identificação têxtil.</td></tr>
+            <tr class="total"><td>Total registado no mapa de custos</td><td class="num">5.553,77 €</td><td>100,0% (inclui 332,10 € pagos diretamente pelos proprietários)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>C. Apuramento do Resultado Operacional Líquido da Atividade AL (2026)</h3>
+      <p>Demonstração do resultado estrito gerado pela exploração corrente do Alojamento Local nas 5 reservas concluídas em 2026 (deduzidas as comissões das plataformas de reserva, os honorários contratuais de gestão e os custos operacionais correntes de limpeza, lavandaria e consumíveis):</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Rubrica da Operação AL (Estadias Concluídas 2026)</th><th class="num">Valor</th><th>Observação / Enquadramento</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Receita Bruta Faturada (5 reservas concluídas 2026)</strong></td><td class="num"><strong>11.097,45 €</strong></td><td>Inclui IVA (6%) onde aplicável (base s/ IVA: 10.469,28 €).</td></tr>
+            <tr><td><strong>(-) Comissões de Plataformas (Booking.com e Airbnb)</strong></td><td class="num"><strong>-328,59 €</strong></td><td>284,94 € (Booking.com) + 43,65 € (Airbnb).</td></tr>
+            <tr class="subtotal"><td>(=) Líquido Recebido após Plataformas</td><td class="num">10.768,86 €</td><td>Montante efetivamente encaixado das estadias de 2026.</td></tr>
+            <tr><td><strong>(-) Comissões de Gestão AL (20% s/ base líquida de IVA)</strong></td><td class="num"><strong>-2.093,86 €</strong></td><td>1.046,93 € Ana Sajara + 1.046,93 € Carlos Almeida.</td></tr>
+            <tr><td><strong>(-) Custos da Operação Corrente do AL (Limpeza, Lavandaria e Consumíveis)</strong></td><td class="num"><strong>-2.845,91 €</strong></td><td>Limpeza e rouparia (2.449,26 €) + consumíveis de acolhimento e estadia (396,65 €).</td></tr>
+            <tr class="total"><td>(=) Resultado Operacional Líquido da Atividade AL</td><td class="num">5.829,09 €</td><td>Saldo gerado pela exploração corrente do AL antes de visitas técnicas contratuais, equipamento da casa e obras/propriedade.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Nota: O resultado operacional apurado (5.829,09 €) não inclui a quota-parte proporcional dos consumos gerais da propriedade imputáveis à ocupação do AL (água, eletricidade, telecomunicações e jardinagem), nem eventuais serviços de manutenção exclusivamente afetos à operação do AL ainda não contabilizados à data de emissão deste relatório.</p>
+
+      <h3>D. Enquadramento do Inventário Geral</h3>
+      <p>O inventário geral será apresentado posteriormente, em conciliação com a informação atualizada recolhida por Carlos Almeida.</p>
+    </section>
+  </main>
+</div>
+</body>
+</html>
